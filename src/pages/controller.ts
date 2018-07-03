@@ -1,10 +1,13 @@
-import { JsonController, Get, Param, Put, Body, NotFoundError, HttpCode, Post} from 'routing-controllers'
+import { JsonController, Get, Param, Put, Body, NotFoundError, HttpCode, Post, Authorized} from 'routing-controllers'
 import Page from './entity'
 
 // type PageList = { pages: Page[] }
 
 @JsonController()
 export default class PageController {
+
+
+
         @Get('/pages/:id')
     getPage(
       @Param('id') id: number
@@ -13,11 +16,13 @@ export default class PageController {
     }
 
 
+
     @Get('/pages')
     async allPages() {
       const pages = await Page.find()
       return { pages }
     }
+    @Authorized()
 
     @Put('/pages/:id')
     async updatePage(
@@ -29,7 +34,7 @@ export default class PageController {
     
       return Page.merge(page, update).save()
     }
-
+ @Authorized()
 @Post('/pages')
 @HttpCode(201)
 createPage(

@@ -31,11 +31,13 @@ export default class UsersController {
 
 @Post('/users')
 @HttpCode(201)
-createPage(
-  @Body() page: User
+async createUser(
+  @Body() user: User
 ) {
-  return page.save()
+  const {password, ...rest} = user
+  const entity = User.create(rest)
+  await entity.setPassword(password)
+  return entity.save()
 }
-
 
 }
